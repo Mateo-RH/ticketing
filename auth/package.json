@@ -1,0 +1,23 @@
+{
+  "name": "auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node-dev --poll src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.15.10",
+    "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "express-validator": "^6.15.0",
+    "ts-node-dev": "^2.0.0"
+  }
+}
