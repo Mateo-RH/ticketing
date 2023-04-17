@@ -9,9 +9,19 @@ import { signinRouter } from "./routes/signin";
 import { signoutRouter } from "./routes/signout";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
+import cookieSession from "cookie-session";
+import assert from "assert";
 
 const app = express();
+
+app.set("trust proxy", true); //Trust and keep https when proxied from ngix
 app.use(json());
+app.use(
+  cookieSession({
+    signed: false, //no cookie encryption
+    secure: true, //https
+  })
+);
 
 app.use(currentUserRouter);
 app.use(signupRouter);
@@ -25,6 +35,8 @@ app.all("*", async () => {
 app.use(errorHandler);
 
 const start = async () => {
+  assert(process.env.JWT_KEY, "JWT_KEY it's not defined");
+
   try {
     await mongoose.connect("mongodb://auth-mongo-srv:27017/auth");
     console.log("Connected to mongodb");
