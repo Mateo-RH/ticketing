@@ -1,8 +1,20 @@
-import nats from "node-nats-streaming";
+import nats, { Message } from "node-nats-streaming";
 import { randomBytes } from "crypto";
-import { TicketCreatedListener } from "./events/ticket-created-listener";
+import {
+  Listener,
+  Subjects,
+  TicketCreatedEvent,
+} from "@racheticketsorg/common";
 
-console.clear();
+class TicketCreatedListener extends Listener<TicketCreatedEvent> {
+  readonly subject: Subjects.TicketCreated = Subjects.TicketCreated;
+  queueGroupName = "payments-service";
+
+  onMessage(data: TicketCreatedEvent["data"], msg: Message) {
+    console.log("Event data!", data);
+    msg.ack();
+  }
+}
 
 const stan = nats.connect("ticketing", randomBytes(4).toString("hex"), {
   url: "http://localhost:4222",
