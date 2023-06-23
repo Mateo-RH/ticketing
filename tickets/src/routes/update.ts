@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { Ticket } from "../models/ticket";
 import {
+  BadRequestError,
   NotAuthorizedError,
   NotFoundError,
   requireAuth,
@@ -22,12 +23,15 @@ router.put(
 
     if (!ticket) throw new NotFoundError();
     if (ticket.userId !== req.currentUser.id) throw new NotAuthorizedError();
+    if (ticket.orderId)
+      throw new BadRequestError("Cannot edit a reserved ticket");
 
     ticket.set({ title: req.body.title, price: req.body.price });
     await ticket.save();
 
     new TicketUpdatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
+      version: ticket.version,
       title: ticket.title,
       price: ticket.price,
       userId: ticket.userId,
