@@ -7,7 +7,7 @@ import { TicketUpdatedListener } from "./events/listeners/ticket-updated-listene
 import { ExpirationCompleteListener } from "./events/listeners/expiration-complete-listener";
 
 const start = async () => {
-  console.log("Starting")
+  console.log("Starting...");
   assert(process.env.JWT_KEY, "JWT_KEY it's not defined");
   assert(process.env.MONGO_URI, "MONGO_URI it's not defined");
   assert(process.env.NATS_CLIENT_ID, "NATS_CLIENT_ID it's not defined");
